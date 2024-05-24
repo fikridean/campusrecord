@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
+use App\Models\User;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,5 +21,49 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        Role::factory()->create([
+            'name' => 'admin',
+        ]);
+
+        Role::factory()->create([
+            'name' => 'student',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Admin Account',
+            'username' => 'admin',
+            'NIM' => '1234567890',
+            'date_of_birth' => '2000-01-01',
+            'address' => 'Jl. Test No. 1',
+            'rt_number' => 1,
+            'rw_number' => 1,
+            'village' => 'Test Village',
+            'district' => 'Test District',
+            'city' => 'Test City',
+            'province' => 'Test Province',
+            'phone_number' => '081234567890',
+            'hobby' => 'Test Hobby',
+            'password' => bcrypt('password'),
+            'role_id' => 1,
+        ]);
+
+        User::factory()->create([
+            'name' => 'Student Account',
+            'username' => 'student',
+            'NIM' => '0987654321',
+            'date_of_birth' => '2000-01-01',
+            'address' => 'Jl. Test No. 2',
+            'rt_number' => '02',
+            'rw_number' => '04',
+            'village' => 'Test Village',
+            'district' => 'Test District',
+            'city' => 'Test City',
+            'province' => 'Test Province',
+            'phone_number' => '081234567890',
+            'hobby' => 'Test Hobby',
+            'password' => bcrypt('password'),
+            'role_id' => 2,
+        ]);
     }
 }
