@@ -46,38 +46,66 @@ class AuthController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function updatePassword(Request $request)
     {
+        // { REQUEST EXAMPLE
+        //     "current_password": "currentPassword123",
+        //     "new_password": "newPassword123",
+        //     "new_password_confirmation": "newPassword123"
+        // }
+
+        // Get the ID of the user to update, considering admin privileges
         if (Gate::allows('isAdmin')) {
-            $id = $request->id;
+
+
+            if ($request->has('id')) {
+                $validate = $request->validate([
+                    'new_password' => 'required|string|min:8|confirmed',
+                    'id' => 'integer|exists:users,id'
+                ]);
+            } else {
+                $validate = $request->validate([
+                    'current_password' => 'string|min:8',
+                    'new_password' => 'required|string|min:8|confirmed',
+                ]);
+
+                $validate['id'] = Auth::id();
+            }
         } else {
-            $id = Auth::id();
+            $validate = $request->validate([
+                'current_password' => 'required|string|min:8',
+                'new_password' => 'required|string|min:8|confirmed',
+            ]);
+
+            $validate['id'] = Auth::id();
         }
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'string|min:3|max:100',
-            'date_of_birth' => 'string|min:3|max:50',
-            'address' => 'string|min:3|max:100',
-            'rt_number' => 'string|min:2|max:100',
-            'rw_number' => 'string|min:2|max:100',
-            'village' => 'string|min:3|max:100',
-            'district' => 'string|min:3|max:100',
-            'city' => 'string|min:3|max:100',
-            'province' => 'string|min:3|max:100',
-            'phone_number' => 'string|min:3|max:100',
-            'hobby' => 'string|min:3|max:100',
-        ]);
+        // Find the user
+        $user = User::find($validate['id']);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
+        if (Gate::allows('isAdmin')) {
+            if (!$request->id) {
+                if (!Hash::check($validate['current_password'], $user->password)) {
+                    return response()->json([
+                        'message' => 'Current password is incorrect'
+                    ], 400);
+                }
+            }
+        } else {
+            // Check if the current password matches
+            if (!Hash::check($validate['current_password'], $user->password)) {
+                return response()->json([
+                    'message' => 'Current password is incorrect'
+                ], 400);
+            }
         }
 
-        $user = User::find($id);
-        $user->update($request->all());
+        // Update the password
+        $user->password = Hash::make($request->new_password);
+        $user->save();
 
         return response()->json([
-            'message' => 'User updated',
-            'data' => $user
+            'message' => 'Password updated successfully'
         ]);
     }
 
@@ -85,7 +113,7 @@ class AuthController extends Controller
     {
         if (!Auth::attempt($request->only('username', 'password'))) {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Wrong login details'
             ], 401);
         }
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
@@ -49,6 +50,18 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         if (Gate::allows('isAdmin')) {
+
+            $validate = $request->validate([
+                'name' => 'required|string|min:3|max:100',
+            ]);
+
+            if (!$validate) {
+                return response()->json([
+                    'message' => 'validate error',
+                    'data' => $validate
+                ], 400);
+            }
+
             $role = Role::create($request->all());
 
             return response()->json([
@@ -64,12 +77,22 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
-
         if (Gate::allows('isAdmin')) {
+            $validate = $request->validate([
+                'name' => 'required|string|min:3|max:100',
+            ]);
+
             $role = Role::find($id);
 
             if ($role) {
-                $role->update($request->all());
+                if (!$validate) {
+                    return response()->json([
+                        'message' => 'validate error',
+                        'data' => $validate
+                    ], 400);
+                }
+
+                $role->update($validate);
 
                 return response()->json([
                     'message' => 'success',
