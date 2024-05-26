@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('signIn');
+});
+
+Route::get('/signUp', function () {
+    return view('signUp');
 });
 
 Route::get('/dashboard', function () {
