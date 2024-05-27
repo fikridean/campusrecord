@@ -24,27 +24,20 @@ Route::get('/login', function () {
     return view('test');
 })->name('test');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::middleware('auth:sanctum')->group(function () {
-    // your authenticated API routes here
-})->middleware('web');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/update-password', [AuthController::class, 'updatePassword'])->name('update-password');
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/update-password', [AuthController::class, 'updatePassword']);
+    Route::get('/user', [UserController::class, 'profile'])->name('user');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/search', [UserController::class, 'search'])->name('users.search');
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+    Route::post('/users', [UserController::class, 'updateProfile'])->name('users.update');
 
-    // Route::get('/user', [UserController::class, 'profile']);
-    Route::get('/users', [UserController::class, 'index']);
-    Route::post('/users/search', [UserController::class, 'search']);
-    Route::get('/users/{id}', [UserController::class, 'show']);
-    Route::post('/users', [UserController::class, 'updateProfile']);
-
-    Route::get('/roles', [RoleController::class, 'index']);
-    Route::get('/roles/{id}', [RoleController::class, 'show']);
-    Route::post('/roles', [RoleController::class, 'store']);
-    Route::post('/roles/{id}', [RoleController::class, 'update']);
-    Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('/roles/{id}', [RoleController::class, 'show'])->name('roles.show');
+    Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+    Route::post('/roles/{id}', [RoleController::class, 'update'])->name('roles.update');
+    Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
 });

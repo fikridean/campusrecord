@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\ActivityLog;
+
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,7 @@ class AuthController extends Controller
             'district' => 'required|string|min:3|max:100',
             'city' => 'required|string|min:3|max:100',
             'province' => 'required|string|min:3|max:100',
-            'maps_url' => 'required|string|min:3|max:100',
+            'map_url' => 'required|string|min:3|max:100',
             'phone_number' => 'required|string|min:3|max:100',
             'hobby' => 'required|string|min:3|max:100',
             'password' => 'required|string|min:3|max:100'
@@ -40,6 +41,11 @@ class AuthController extends Controller
         $user = User::create($request->all());
 
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'Registered'
+        ]);
 
         return response()->json([
             'data' => $user,
@@ -97,6 +103,11 @@ class AuthController extends Controller
         $user->password = Hash::make($request->new_password);
         $user->save();
 
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'Password updated'
+        ]);
+
         return response()->json([
             'message' => 'Password updated successfully'
         ]);
@@ -105,10 +116,13 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         if (!Auth::attempt($request->only('username', 'password'))) {
+
             return response()->json([
                 'message' => 'Wrong login details'
             ], 401);
         }
+
+        $request->session()->regenerate();
 
         $user = User::where('username', $request->username)->firstOrFail();
 
@@ -116,23 +130,32 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        $response = new Response('Bearer Token');
-        $response->withCookie(cookie('auth_token', $token, 62500));
-        return $response;
+        // $response = new Response('Bearer Token');
+        // $response->withCookie(cookie('auth_token', $token, 62500));
 
-        // return response()->json([
-        //     'message' => 'Login success',
-        //     'access_token' => $token,
-        //     'token_type' => 'Bearer'
-        // ]);
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'Logged in'
+        ]);
+
+        return response()->json([
+            'message' => 'Login success',
+            'access_token' => $token,
+            'token_type' => 'Bearer'
+        ]);
     }
 
     public function logout()
     {
-        $user = User::where('id', Auth::id())->first;
-        $user->tokens()->delete(); // emang error, cuekin aja disini
+        auth()->guard('web')->logout();
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'activity' => 'Logged out'
+        ]);
+
         return response()->json([
-            'message' => 'logout success'
+            'message' => 'Logged out'
         ]);
     }
 }

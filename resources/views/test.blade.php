@@ -5,31 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login</title>
 </head>
 
 <body>
 
-    <form method="POST" action="{{ route('login') }}">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username"><br><br>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br><br>
-
-        <input type="submit" value="Login">
-    </form>
-
-    <br>
-
-    <a href="/test2">Test udah login apa blom</a>
-
-    <br>
-
-    {{ Auth::check() ? 'Logged in' : 'Logged out' }}
-
     @if (Auth::check())
-        <a href="{{ route('logout') }}">Logout</a>
+        <form action="{{ route('logout', Auth::user()) }}" method="POST">
+            <button>
+                Logout
+            </button>
+        </form>
+    @else
+        <form method="POST" action="{{ route('login') }}">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br><br>
+
+            <input type="submit" value="Login">
+        </form>
     @endif
 
 </body>
