@@ -53,12 +53,9 @@ class UserController extends Controller
         $user = User::find($id);
 
         if ($user) {
-            $searchurl = $this->urlmapsgenerator($user);
-
             return response()->json([
                 'message' => 'success',
                 'data' => $user,
-                'map_url' => $searchurl
             ]);
         } else {
             return response()->json([
@@ -119,30 +116,30 @@ class UserController extends Controller
         ]);
     }
 
-    public function urlmapsgenerator($user)
-    {
-        $addressComponents = [
-            $user->address,
-            $user->rt_number,
-            $user->rw_number,
-            $user->village,
-            $user->district,
-            $user->city,
-            $user->province,
-        ];
+    // public function urlmapsgenerator($user)
+    // {
+    //     $addressComponents = [
+    //         $user->address,
+    //         $user->rt_number,
+    //         $user->rw_number,
+    //         $user->village,
+    //         $user->district,
+    //         $user->city,
+    //         $user->province,
+    //     ];
 
-        // Filter out empty components
-        $addressComponents = array_filter($addressComponents);
+    //     // Filter out empty components
+    //     $addressComponents = array_filter($addressComponents);
 
-        // Concatenate address components into a single address string
-        $address = implode(', ', $addressComponents);
+    //     // Concatenate address components into a single address string
+    //     $address = implode(', ', $addressComponents);
 
-        // URL-encode the address string
-        $encodedAddress = urlencode($address);
+    //     // URL-encode the address string
+    //     $encodedAddress = urlencode($address);
 
-        // Formulate the Google Maps search URL
-        $searchUrl = 'https://www.google.com/maps/search/?api=1&query=' . $encodedAddress;
+    //     // Formulate the Google Maps search URL
+    //     $searchUrl = 'https://www.google.com/maps/search/?api=1&query=' . $encodedAddress;
 
-        return $searchUrl;
-    }
+    //     return $searchUrl;
+    // }
 }

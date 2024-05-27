@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\ProfileController;
 
 
 /*
@@ -28,5 +29,17 @@ Route::get('/dashboard', function () {
 //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
+
+
+Route::get('/test', function () {
+    return view('test');
+})->name('test');
+
+Route::get('/test2', function () {
+    return view('test2');
+})->name('test2')->middleware(['auth:sanctum', 'web']);
+
+
+Route::get('/check', [ApiController::class, 'fetchData'])->name('check');
 
 require __DIR__ . '/auth.php';

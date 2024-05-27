@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use \Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -26,6 +27,7 @@ class AuthController extends Controller
             'district' => 'required|string|min:3|max:100',
             'city' => 'required|string|min:3|max:100',
             'province' => 'required|string|min:3|max:100',
+            'maps_url' => 'required|string|min:3|max:100',
             'phone_number' => 'required|string|min:3|max:100',
             'hobby' => 'required|string|min:3|max:100',
             'password' => 'required|string|min:3|max:100'
@@ -48,16 +50,7 @@ class AuthController extends Controller
 
     public function updatePassword(Request $request)
     {
-        // { REQUEST EXAMPLE
-        //     "current_password": "currentPassword123",
-        //     "new_password": "newPassword123",
-        //     "new_password_confirmation": "newPassword123"
-        // }
-
-        // Get the ID of the user to update, considering admin privileges
         if (Gate::allows('isAdmin')) {
-
-
             if ($request->has('id')) {
                 $validate = $request->validate([
                     'new_password' => 'required|string|min:8|confirmed',
@@ -119,18 +112,25 @@ class AuthController extends Controller
 
         $user = User::where('username', $request->username)->firstOrFail();
 
+        $user->tokens()->delete();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'message' => 'Login success',
-            'access_token' => $token,
-            'token_type' => 'Bearer'
-        ]);
+        $response = new Response('Bearer Token');
+        $response->withCookie(cookie('auth_token', $token, 62500));
+        return $response;
+
+        // return response()->json([
+        //     'message' => 'Login success',
+        //     'access_token' => $token,
+        //     'token_type' => 'Bearer'
+        // ]);
     }
 
     public function logout()
     {
-        Auth::user()->tokens()->delete();
+        $user = User::where('id', Auth::id())->first;
+        $user->tokens()->delete(); // emang error, cuekin aja disini
         return response()->json([
             'message' => 'logout success'
         ]);

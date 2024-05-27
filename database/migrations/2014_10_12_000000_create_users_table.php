@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('district', 100);
             $table->string('city', 100);
             $table->string('province', 100);
+            $table->string('map_url', 100);
 
             $table->string('phone_number', 100);
             $table->text('hobby');
