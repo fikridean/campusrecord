@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\User;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -15,15 +16,27 @@ class UserController extends Controller
     {
         $users = User::where('role_id', '!=', 1)->get();
 
-        return response()->json([
-            'message' => 'success',
-            'data' => $users
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Accessed user list'
         ]);
+
+        return redirect()->route('users.index');
+
+        // return response()->json([
+        //     'message' => 'success',
+        //     'data' => $users
+        // ]);
     }
 
     public function profile()
     {
         $user = Auth::user();
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Accessed own profile'
+        ]);
 
         return response()->json([
             'message' => 'success',
@@ -42,6 +55,11 @@ class UserController extends Controller
             ->orWhere('nim', 'like', '%' . $validate['search'] . '%')
             ->get();
 
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Searched for user'
+        ]);
+
         return response()->json([
             'message' => 'success',
             'data' => $users
@@ -53,14 +71,21 @@ class UserController extends Controller
         $user = User::find($id);
 
         if ($user) {
-            $searchurl = $this->urlmapsgenerator($user);
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Accessed user detail'
+            ]);
 
             return response()->json([
                 'message' => 'success',
                 'data' => $user,
-                'map_url' => $searchurl
             ]);
         } else {
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Tried to access user detail but not found'
+            ]);
+
             return response()->json([
                 'message' => 'not found',
             ], 404);
@@ -80,6 +105,7 @@ class UserController extends Controller
                 'district' => 'string|min:3|max:100',
                 'city' => 'string|min:3|max:100',
                 'province' => 'string|min:3|max:100',
+                'map_url' => 'string|min:3|max:100',
                 'phone_number' => 'string|min:3|max:100',
                 'hobby' => 'string|min:3|max:100',
                 'nim' => 'string|min:3|max:100|unique:users',
@@ -113,36 +139,41 @@ class UserController extends Controller
         $user = User::find($validate['id']);
         $user->update($validate);
 
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Updated user profile'
+        ]);
+
         return response()->json([
             'message' => 'User updated',
             'data' => $user
         ]);
     }
 
-    public function urlmapsgenerator($user)
-    {
-        $addressComponents = [
-            $user->address,
-            $user->rt_number,
-            $user->rw_number,
-            $user->village,
-            $user->district,
-            $user->city,
-            $user->province,
-        ];
+    // public function urlmapsgenerator($user)
+    // {
+    //     $addressComponents = [
+    //         $user->address,
+    //         $user->rt_number,
+    //         $user->rw_number,
+    //         $user->village,
+    //         $user->district,
+    //         $user->city,
+    //         $user->province,
+    //     ];
 
-        // Filter out empty components
-        $addressComponents = array_filter($addressComponents);
+    //     // Filter out empty components
+    //     $addressComponents = array_filter($addressComponents);
 
-        // Concatenate address components into a single address string
-        $address = implode(', ', $addressComponents);
+    //     // Concatenate address components into a single address string
+    //     $address = implode(', ', $addressComponents);
 
-        // URL-encode the address string
-        $encodedAddress = urlencode($address);
+    //     // URL-encode the address string
+    //     $encodedAddress = urlencode($address);
 
-        // Formulate the Google Maps search URL
-        $searchUrl = 'https://www.google.com/maps/search/?api=1&query=' . $encodedAddress;
+    //     // Formulate the Google Maps search URL
+    //     $searchUrl = 'https://www.google.com/maps/search/?api=1&query=' . $encodedAddress;
 
-        return $searchUrl;
-    }
+    //     return $searchUrl;
+    // }
 }
