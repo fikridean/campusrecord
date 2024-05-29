@@ -150,30 +150,29 @@ class UserController extends Controller
         ]);
     }
 
-    // public function urlmapsgenerator($user)
-    // {
-    //     $addressComponents = [
-    //         $user->address,
-    //         $user->rt_number,
-    //         $user->rw_number,
-    //         $user->village,
-    //         $user->district,
-    //         $user->city,
-    //         $user->province,
-    //     ];
+    public function activities()
+    {
+        $activities = ActivityLog::where('user_id', Auth::id())->get();
 
-    //     // Filter out empty components
-    //     $addressComponents = array_filter($addressComponents);
+        return response()->json([
+            'message' => 'success',
+            'data' => $activities
+        ]);
+    }
 
-    //     // Concatenate address components into a single address string
-    //     $address = implode(', ', $addressComponents);
+    public function allActivities()
+    {
+        if (Gate::allows('isAdmin')) {
+            $activities = ActivityLog::all();
 
-    //     // URL-encode the address string
-    //     $encodedAddress = urlencode($address);
-
-    //     // Formulate the Google Maps search URL
-    //     $searchUrl = 'https://www.google.com/maps/search/?api=1&query=' . $encodedAddress;
-
-    //     return $searchUrl;
-    // }
+            return response()->json([
+                'message' => 'success',
+                'data' => $activities
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'unauthorized'
+            ], 401);
+        }
+    }
 }
