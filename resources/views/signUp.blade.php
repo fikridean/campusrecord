@@ -46,75 +46,76 @@
             <h1 class="text-3xl font-semibold mb-6 text-center">Lets Create your account</h1>
             <p class="mb-6 text-center">Please fill in the form to create account</p>
             <div class="w-full overflow-y-auto overflow-x-hidden">
-                <form id="signupForm">
+                <form id="signupForm" action="{{ route('register') }}" method="POST">
+                    @csrf
                     <div class="form-container">
                         <!-- Section 1 -->
                         <div id="section-1" class="form-section">
                             <div class="mb-4">
                                 <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                                <input type="text" id="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your name" required>
+                                <input type="text" name="name" id="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your name" required>
                             </div>
                             <div class="mb-4">
                                 <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                                <input type="text" id="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your username" required>
+                                <input type="text" name="username" id="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your username" required>
                             </div>
                             <div class="mb-4">
                                 <label for="nim" class="block text-sm font-medium text-gray-700">NIM</label>
-                                <input type="text" id="nim" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your NIM" required>
+                                <input type="text" id="nim" name="nim" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your NIM" required>
                             </div>
                             <div class="mb-4">
                                 <label for="date_of_birth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
-                                <input type="date" id="date_of_birth" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                <input type="date" id="date_of_birth" name="date_of_birth" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
                             </div>
                             <div class="mb-4">
                                 <label for="phone_number" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                                <input type="tel" id="phone_number" pattern="+62[0-9]{12}" placeholder="+6288117628802" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                <input type="tel" id="phone_number" name="phone_number" pattern="+62[0-9]{12}" placeholder="+6288117628802" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
                             </div>
                             <div class="mb-4">
                                 <label for="hobby" class="block text-sm font-medium text-gray-700">Hobby</label>
-                                <input type="text" id="hobby" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your hobby" required>
+                                <input type="text" id="hobby" name="hobby" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your hobby" required>
                             </div>
                         </div>
                         <!-- Section 2 -->
                         <div id="section-2" class="form-section">
                             <div class="mb-4">
                                 <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                                <input type="text" id="address" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your address" required>
+                                <input type="text" id="address" name="address" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your address" required>
                             </div>
                             <div class="mb-4">
                                 <label for="rt_number" class="block text-sm font-medium text-gray-700">RT Number</label>
-                                <input type="text" id="rt_number" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your RT number" required>
+                                <input type="text" id="rt_number" name="rt_number" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your RT number" required>
                             </div>
                             <div class="mb-4">
                                 <label for="rw_number" class="block text-sm font-medium text-gray-700">RW Number</label>
-                                <input type="text" id="rw_number" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your RW number" required>
+                                <input type="text" id="rw_number" name="rw_number" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your RW number" required>
                             </div>
                             <div class="mb-4">
                                 <label for="village" class="block text-sm font-medium text-gray-700">Village</label>
-                                <input type="text" id="village" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your village" required>
+                                <input type="text" id="village" name="village" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your village" required>
                             </div>
                             <div class="mb-4">
                                 <label for="district" class="block text-sm font-medium text-gray-700">District</label>
-                                <input type="text" id="district" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your district" required>
+                                <input type="text" id="district" name="district" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your district" required>
                             </div>
                             <div class="mb-4">
                                 <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-                                <input type="text" id="city" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your city" required>
+                                <input type="text" id="city" name="city" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your city" required>
                             </div>
                             <div class="mb-4">
                                 <label for="province" class="block text-sm font-medium text-gray-700">Province</label>
-                                <input type="text" id="province" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your province" required>
+                                <input type="text" id="province" name="province" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your province" required>
                             </div>
                         </div>
                         <!-- Section 3 -->
                         <div id="section-3" class="form-section">
                             <div class="mb-4">
-                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                                <input type="email" id="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your email" required>
+                                <label for="map_url" class="block text-sm font-medium text-gray-700">URL Map</label>
+                                <input type="map_url" id="map_url" name="map_url" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your email" required>
                             </div>
                             <div class="mb-6">
                                 <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                                <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your password" required>
+                                <input type="password" id="password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your password" required>
                             </div>
                             <div>
                                 <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Sign Up</button>
@@ -123,6 +124,8 @@
                     </div>
                 </form>
             </div>
+
+
             <p class="mt-6 text-center text-sm text-gray-600">
                 Have an account? <a href="/" class="font-medium text-blue-600 hover:text-blue-500">Sign in here</a>
             </p>

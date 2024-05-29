@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use \Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
+use Redirect;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -47,11 +49,13 @@ class AuthController extends Controller
             'activity' => 'Registered'
         ]);
 
-        return response()->json([
-            'data' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer'
-        ]);
+        return redirect(Route('dashboard'));
+
+        // return response()->json([
+        //     'data' => $user,
+        //     'access_token' => $token,
+        //     'token_type' => 'Bearer'
+        // ]);
     }
 
     public function updatePassword(Request $request)
@@ -121,10 +125,11 @@ class AuthController extends Controller
         ]);
 
         if (!Auth::attempt($request->only('username', 'password'))) {
-
-            return response()->json([
-                'message' => 'Username / Password Salah'
-            ], 401);
+            return redirect(Route('signInError'));
+            
+            // return response()->json([
+            //     'message' => 'Username / Password Salah'
+            // ], 401);
         }
 
         $request->session()->regenerate();

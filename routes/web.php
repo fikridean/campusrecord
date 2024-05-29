@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
+
 
 
 /*
@@ -19,22 +21,28 @@ use App\Http\Controllers\Api\AuthController;
 
 Route::get('/', function () {
     return view('signIn');
-})->name('signIn');;
+})->name('signIn');
+
+Route::get('/?message="Password Salah"', function () {
+    return view('signIn');
+})->name('signInError');
 
 Route::get('/signUp', function () {
     return view('signUp');
 })->name('signUp');
 
-Route::get('/adminadmin', function () {
-    return view('admin');
-})->name('admin');
-
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/admin', function () {
+    return view('admin');
+})->middleware(['auth', 'verified'])->name('admin');
+
+Route::get('/datauser', function () {
+    return view('datauser');
+})->middleware(['auth', 'verified'])->name('datauser');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

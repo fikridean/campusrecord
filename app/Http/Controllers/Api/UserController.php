@@ -14,14 +14,20 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::where('role_id', '!=', 1)->get();
-
+        if (Gate::allows('isAdmin')) {
+            $users = User::all();
+        } else {
+            $users = User::where(['role_id' => 2])->get();
+        }
+        
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Accessed user list'
         ]);
 
-        return redirect()->route('users.index');
+        return view('dashboard', [
+            'users' => $users
+        ]);
 
         // return response()->json([
         //     'message' => 'success',
@@ -58,6 +64,10 @@ class UserController extends Controller
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Searched for user'
+        ]);
+
+        return view('dashboard', [
+            'users' => $users
         ]);
 
         return response()->json([

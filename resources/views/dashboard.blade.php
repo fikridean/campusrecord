@@ -1,3 +1,7 @@
+<?php 
+    $value = 1
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,26 +26,9 @@
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <div id="sidebar" class="w-64 bg-blue-700 text-white flex flex-col min-h-screen fixed transform -translate-x-full transition-transform duration-200 ease-in-out">
-            <div class="p-6 font-bold text-center">
-                <p class="font-bold text-2xl text-center">Dashboard</p>
-                <p class="font-bold text-md text-center">UID : 123456789</p>
-            </div>
-            <div class="pl-7">
-                <nav class="flex-1">
-                    <ul>
-                        <li class="p-4 hover:text-blue-800 hover:bg-white hover:rounded-tl-full hover:rounded-bl-full hover:font-bold {{ request()->is('dashboard') ? 'active-nav-link' : '' }}">
-                            <a href="/dashboard" class="block">Dashboard</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-
         <!-- Main Content -->
         <div id="main-content" class="flex w-full flex-col h-screen bg-white transition-all duration-200 ease-in-out">
-            <div class="flex justify-between items-center bg-white p-4 shadow px-10">
+            <div class="flex sticky justify-between items-center bg-white p-4 shadow px-10">
                 <div class="flex items-center">
                     <button id="menu-button" class="text-blue-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -68,65 +55,140 @@
             <!-- Content -->
             
                 <!-- Khusus Admin -->
-        
+                @can('isAdmin')
+                <h1>ini Admin</h1>
+                @endcan
                 <!-- Khusus User -->
+                @can('isStudent')
                 <div class="flex flex-col w-full p-10 bg-white overflow-auto">
-                    <div class="my-5 flex">
-                        <input type="text" placeholder="Search your friend here by username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <button class="mx-5 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Search</button>
+                    <!-- Search User -->
+                    <div class="my-5 w-full flex">
+                        <input id="search-input" type="text" placeholder="Search your friend here by username / NIM / Name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <button id="search-button" class="mx-5 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Search</button>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow w-full">
-                        <h1 class="text-2xl font-bold my-5">Your friend List</h1>
+
+                    <h1 class="text-2xl font-bold my-5">Your friend List</h1>
+                    <!-- Friends List -->
+                    <div class="bg-white p-6 rounded-lg shadow w-full overflow-x-auto h-52">
                        <!-- code here -->
                        <table class="min-w-full bg-white">
                            <thead>
                                <tr>
-                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Nomor</th>
-                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Nama</th>
-                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Alamat</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Code Number</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Username</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">NIM</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Name</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Address</th>
                                </tr>
                            </thead>
-                           <tbody>
-                               <tr>
-                                   <td class="py-2 px-4 border-b text-center">1</td>
-                                   <td class="py-2 px-4 border-b text-center">John Doe</td>
-                                   <td class="py-2 px-4 border-b text-center">
-                                       <button class="py-1 bg-blue-600 text-white px-2 rounded hover:opacity-80">
-                                           <a href="#">Cari Rumah</a>
-                                        </button>
-                                   </td>
-                               </tr>
+                           <tbody id="results-table-body">
+                                @foreach($users as $user)
+                                <tr>
+                                    <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
+                                    <td class="py-2 px-4 border-b text-center">{{ $user->username }}</td>
+                                    <td class="py-2 px-4 border-b text-center">{{ $user->nim }}</td>
+                                    <td class="py-2 px-4 border-b text-center">{{ $user->name }}</td>
+                                    <td class="py-2 px-4 border-b text-center">
+                                        <button class="py-1 bg-blue-600 text-white px-2 rounded hover:opacity-80">
+                                            <a href="{{ $user->map_url }}" target="_">Find House</a>
+                                            </button>
+                                    </td>
+                                </tr>
+                               @endforeach
                            </tbody>
                        </table>
                     </div>
+
+                    <h1 class="text-2xl font-bold my-5">Your Log Activity</h1>
+                    <!-- Log Activity -->
+                    <div class="bg-white p-6 rounded-lg shadow w-full overflow-x-auto h-52">
+                       <!-- code here -->
+                       <table class="min-w-full bg-white">
+                           <thead>
+                               <tr>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Code Number</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Activity</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Created</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Updated</th>
+                               </tr>
+                           </thead>
+                           <tbody id="activity-table-body">
+                                <!-- Data will be appended here -->
+                            </tbody>
+                       </table>
+                    </div>
                 </div>
+                @endcan
             </div>
         </div>
     </div>
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const menuButton = document.getElementById('menu-button');
-
-        menuButton.addEventListener('click', () => {
-            sidebar.classList.toggle('-translate-x-full');
-            mainContent.classList.toggle('ml-64');
-        });
-
-        const notificationButton = document.getElementById('notification-button');
-        const notificationPopup = document.getElementById('notification-popup');
-
-        notificationButton.addEventListener('click', () => {
-            notificationPopup.classList.toggle('hidden');
-        });
-
-        // Optional: Hide the popup when clicking outside of it
-        document.addEventListener('click', (event) => {
-            if (!notificationButton.contains(event.target) && !notificationPopup.contains(event.target)) {
-                notificationPopup.classList.add('hidden');
-            }
-        });
-    </script>
     <script src="{{ mix('js/app.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                url: '/api/user/activities',
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    var tableBody = $('#activity-table-body');
+                    console.log(data);
+                    var number = 1;
+                    var activities = data.data;
+
+                    // Get the last 30 activities
+                    var last30Activities = activities.slice(-30);
+
+                    last30Activities.forEach(function(activity) {
+                        var row = '<tr>' +
+                                    '<td class="py-2 px-4 border text-center">' + number + '</td>' +
+                                    '<td class="py-2 px-4 border text-center">' + activity.activity + '</td>' +
+                                    '<td class="py-2 px-4 border text-center">' + activity.created_at + '</td>' +
+                                    '<td class="py-2 px-4 border text-center">' + activity.updated_at + '</td>' +
+                                '</tr>';
+                        tableBody.append(row);
+                        number += 1;
+                    });
+                },
+                error: function(error) {
+                    console.error("Error fetching data: ", error);
+                }
+            });
+
+            $('#search-button').on('click', function() {
+                var searchQuery = $('#search-input').val();
+                console.log(searchQuery)
+
+                $.ajax({
+                    url: '/api/users/search',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({ search: searchQuery }),
+                    success: function(response) {
+                        var tableBody = $('#results-table-body');
+                        tableBody.empty(); // Clear existing results
+
+                        var number = 1;
+                        response.data.forEach(function(user) {
+                            var row = '<tr>' +
+                                        '<td class="py-2 px-4 border text-center">' + number + '</td>' +
+                                        '<td class="py-2 px-4 border text-center">' + user.username + '</td>' +
+                                        '<td class="py-2 px-4 border text-center">' + user.nim + '</td>' +
+                                        '<td class="py-2 px-4 border text-center">' + user.name + '</td>' +
+                                    '</tr>';
+                            tableBody.append(row);
+                            number += 1;
+                        });
+                    },
+                    error: function(error) {
+                        console.error("Error fetching data: ", error);
+                    }
+                });
+            });
+        });
+
+
+    </script>
 </body>
 </html>

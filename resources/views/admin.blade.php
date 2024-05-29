@@ -25,14 +25,19 @@
         <!-- Sidebar -->
         <div id="sidebar" class="w-64 bg-blue-700 text-white flex flex-col min-h-screen fixed transform -translate-x-full transition-transform duration-200 ease-in-out">
             <div class="p-6 font-bold text-center">
-                <p class="font-bold text-2xl text-center">Dashboard</p>
-                <p class="font-bold text-md text-center">UID : 123456789</p>
+                <p class="font-bold text-2xl text-center">Username</p>
+                <p class="font-bold text-md text-center">[Role]</p>
+                <p class="font-bold text-md text-center">NIM : 123456789</p>
+                
             </div>
             <div class="pl-7">
                 <nav class="flex-1">
                     <ul>
-                        <li class="p-4 hover:text-blue-800 hover:bg-white hover:rounded-tl-full hover:rounded-bl-full hover:font-bold {{ request()->is('dashboard') ? 'active-nav-link' : '' }}">
-                            <a href="/dashboard" class="block">Dashboard</a>
+                        <li class="p-4 hover:text-blue-800 hover:bg-white hover:rounded-tl-full hover:rounded-bl-full hover:font-bold {{ request()->is('admin') ? 'active-nav-link' : '' }}">
+                            <a href="/admin" class="block">Data Admin</a>
+                        </li>
+                        <li class="p-4 hover:text-blue-800 hover:bg-white hover:rounded-tl-full hover:rounded-bl-full hover:font-bold {{ request()->is('datauser') ? 'active-nav-link' : '' }}">
+                            <a href="/datauser" class="block">Data User</a>
                         </li>
                     </ul>
                 </nav>
@@ -68,11 +73,7 @@
             <!-- Content -->
             
                 <!-- Khusus Admin -->
-               
-               
-
-               
-    
+        
                 <!-- Khusus User -->
                 <div class="flex flex-col w-full p-10 bg-white overflow-auto">
                     <div class="my-5 flex">
@@ -80,23 +81,35 @@
                         <button class="mx-5 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Search</button>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow w-full">
-                        <h1 class="text-2xl font-bold my-5">Your friend List</h1>
+                        <h1 class="text-2xl font-bold my-5">Data Admin</h1>
+
+                        <button class="bg-blue-600 text-white px-2 py-2 mb-4 rounded hover:opacity-80">
+                                          + Tambah Admin
+                                        </button>
+
                        <!-- code here -->
                        <table class="min-w-full bg-white">
                            <thead>
                                <tr>
-                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Nomor</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">No</th>
                                    <th class="py-2 px-4 bg-blue-600 text-white text-center">Nama</th>
-                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Alamat</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Username</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Role</th>
+                                   <th class="py-2 px-4 bg-blue-600 text-white text-center">Fitur</th>
                                </tr>
                            </thead>
                            <tbody>
                                <tr>
-                                   <td class="py-2 px-4 border-b text-center">1</td>
-                                   <td class="py-2 px-4 border-b text-center">John Doe</td>
+                                   <td class="py-2 px-4 border-b text-center"></td>
+                                   <td class="py-2 px-4 border-b text-center"></td>
+                                   <td class="py-2 px-4 border-b text-center"></td>
+                                   <td class="py-2 px-4 border-b text-center"></td>
                                    <td class="py-2 px-4 border-b text-center">
                                        <button class="py-1 bg-blue-600 text-white px-2 rounded hover:opacity-80">
-                                           <a href="#">Cari Rumah</a>
+                                          Delete
+                                        </button>
+                                        <button class="py-1 bg-blue-600 text-white px-2 rounded hover:opacity-80">
+                                          Edit
                                         </button>
                                    </td>
                                </tr>
