@@ -113,7 +113,7 @@ class AuthController extends Controller
     {
         if (!Auth::attempt($request->only('username', 'password'))) {
             return response()->json([
-                'message' => 'Wrong login details'
+                'message' => 'Username / Password Salah'
             ], 401);
         }
 

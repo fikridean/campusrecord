@@ -52,24 +52,13 @@
                         <h1 class="font-bold text-xl">Dashboard</h1>
                     </div>
                 </div>
-                <div class="relative flex space-x-5 text-blue-700">
-                    <div>
-                        <button id="notification-button" class="relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h2a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v3a2 2 0 002 2h2m0 0v5a2 2 0 002 2h4a2 2 0 002-2v-5m-6 0h6" />
-                            </svg>
-                            <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full"></span>
-                        </button>
-                         <!-- Pop-up notification -->
-                        <div id="notification-popup" class="hidden absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4">
-                            <p>No new notifications</p>
-                        </div>
-                    </div>
+                <div class="relative flex text-blue-700 top-3">
                     <a class="relative" href="/">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" class="bi bi-door-open" viewBox="0 0 16 16">
                             <path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
                             <path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117M11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5M4 1.934V15h6V1.077z"/>
                         </svg>
+                        Exit
                     </a>
                 </div>
             </div>
