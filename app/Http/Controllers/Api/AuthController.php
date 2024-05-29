@@ -115,6 +115,11 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $validate = $request->validate([
+            'username' => 'required',
+            'password' => 'required'
+        ]);
+
         if (!Auth::attempt($request->only('username', 'password'))) {
 
             return response()->json([
@@ -135,27 +140,35 @@ class AuthController extends Controller
 
         ActivityLog::create([
             'user_id' => $user->id,
-            'activity' => 'Logged in'
+            'activity' => 'Logged in',
         ]);
 
-        return response()->json([
-            'message' => 'Login success',
-            'access_token' => $token,
-            'token_type' => 'Bearer'
-        ]);
+        return redirect(Route('dashboard'));
+
+        // return response()->json([
+        //     'message' => 'Login success',
+        //     'access_token' => $token,
+        //     'token_type' => 'Bearer'
+        // ]);
     }
 
     public function logout()
     {
+        if (!auth::check()) {
+            return redirect(Route('signIn'));
+        }
+
         auth()->guard('web')->logout();
 
         ActivityLog::create([
             'user_id' => Auth::id(),
             'activity' => 'Logged out'
         ]);
+        
+        return redirect(Route('signIn'));
 
-        return response()->json([
-            'message' => 'Logged out'
-        ]);
+        // return response()->json([
+        //     'message' => 'Logged out'
+        // ]);
     }
 }

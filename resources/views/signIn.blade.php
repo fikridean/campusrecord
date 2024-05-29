@@ -10,20 +10,31 @@
     @vite('resources/css/app.css')
 </head>
 <body class="bg-blue-900">
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen p-10 md:p-0">
         <!-- Login Form -->
-        <div class="flex flex-col justify-center items-center w-full md:w-1/2 bg-white p-8 max-md:border">
+        <div class="flex flex-col justify-center items-center w-full md:w-1/2 bg-white p-8 max-md:border rounded-2xl shadow-md md:rounded-none">
+            <div class="md:hidden flex justify-center items-center">
+                <img src="image/sunshineboy.jpg" alt="helloPerson" class="w-2/3">
+            </div>
             <div class="w-full p-10">
-                <h1 class="text-3xl font-semibold mb-6 text-center">Welcome back!</h1>
+                <h1 class="text-3xl font-semibold mb-6 text-center">Hi, Welcome back!</h1>
                 <p class="mb-6 text-center">Please enter your details to log in</p>
-                <form id="loginForm">
+                <form id="loginForm" action="{{ route('login') }}" method="POST">
+                    @csrf
+                    
                     <div class="mb-4">
                         <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                        <input type="text" id="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your username">
+                        <input type="text" id="username" name="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your username">
                     </div>
                     <div class="mb-4">
                         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your password">
+                        <input type="password" id="password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your password">
+                    </div>
+                    <div class="mb-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="showPassword" class="form-checkbox text-blue-600">
+                            <span class="ml-2 text-sm text-gray-600">Show Password</span>
+                        </label>
                     </div>
                     <div id="error-message" class="my-4 text-red-500 text-center hidden"></div>
                     <div>
@@ -31,7 +42,7 @@
                     </div>
                 </form>
                 <p class="mt-6 text-center text-sm text-gray-600">
-                    Don’t have an account? <a href="/signUp" class="font-medium text-blue-600 hover:text-blue-500">Sign up here</a>
+                    Don’ts have an account? <a href="/signUp" class="font-medium text-blue-600 hover:text-blue-500">Sign up here</a>
                 </p>
             </div>
         </div>
@@ -39,32 +50,12 @@
         <div class="hidden md:block w-1/2 bg-cover bg-center" style="background-image: url('image/signIn.png');"></div>
     </div>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('error-message');
-
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                // Simpan token di localStorage
-                localStorage.setItem('token', data.access_token);
-                console.log(data.access_token)
-                // Redirect ke halaman lain setelah login
-                // window.location.href = '/dashboard';
+        document.getElementById('showPassword').addEventListener('change', function () {
+            var passwordInput = document.getElementById('password');
+            if (this.checked) {
+                passwordInput.type = 'text';
             } else {
-                errorMessage.textContent = data.message;
-                errorMessage.classList.remove('hidden');
+                passwordInput.type = 'password';
             }
         });
     </script>

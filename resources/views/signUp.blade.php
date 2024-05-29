@@ -37,10 +37,13 @@
     </style>
 </head>
 <body class="bg-blue-900">
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen p-10 md:p-0">
         <div class="hidden md:block w-1/2 bg-cover bg-center" style="background-image: url('image/signUp.png');"></div>
-        <div class="flex flex-col items-center w-full md:w-1/2 bg-white p-8 rounded-lg shadow-lg">
-            <h1 class="text-3xl font-semibold mb-6 text-center">Create your account</h1>
+        <div class="flex flex-col items-center w-full md:w-1/2 bg-white p-8 rounded-2xl shadow-lg md:rounded-none">
+            <div class="md:hidden flex justify-center items-center mb-5">
+                <img src="image/smilegirl.jpg" alt="helloPerson" class="w-1/2 rounded-full">
+            </div>
+            <h1 class="text-3xl font-semibold mb-6 text-center">Lets Create your account</h1>
             <p class="mb-6 text-center">Please fill in the form to create account</p>
             <div class="w-full overflow-y-auto overflow-x-hidden">
                 <form id="signupForm">
