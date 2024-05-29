@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\ActivityLog;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use \Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -26,6 +28,7 @@ class AuthController extends Controller
             'district' => 'required|string|min:3|max:100',
             'city' => 'required|string|min:3|max:100',
             'province' => 'required|string|min:3|max:100',
+            'map_url' => 'required|string|min:3|max:100',
             'phone_number' => 'required|string|min:3|max:100',
             'hobby' => 'required|string|min:3|max:100',
             'password' => 'required|string|min:3|max:100'
@@ -39,6 +42,11 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'Registered'
+        ]);
+
         return response()->json([
             'data' => $user,
             'access_token' => $token,
@@ -46,52 +54,89 @@ class AuthController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function updatePassword(Request $request)
     {
         if (Gate::allows('isAdmin')) {
-            $id = $request->id;
+            if ($request->has('id')) {
+                $validate = $request->validate([
+                    'new_password' => 'required|string|min:8|confirmed',
+                    'id' => 'integer|exists:users,id'
+                ]);
+            } else {
+                $validate = $request->validate([
+                    'current_password' => 'string|min:8',
+                    'new_password' => 'required|string|min:8|confirmed',
+                ]);
+
+                $validate['id'] = Auth::id();
+            }
         } else {
-            $id = Auth::id();
+            $validate = $request->validate([
+                'current_password' => 'required|string|min:8',
+                'new_password' => 'required|string|min:8|confirmed',
+            ]);
+
+            $validate['id'] = Auth::id();
         }
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'string|min:3|max:100',
-            'date_of_birth' => 'string|min:3|max:50',
-            'address' => 'string|min:3|max:100',
-            'rt_number' => 'string|min:2|max:100',
-            'rw_number' => 'string|min:2|max:100',
-            'village' => 'string|min:3|max:100',
-            'district' => 'string|min:3|max:100',
-            'city' => 'string|min:3|max:100',
-            'province' => 'string|min:3|max:100',
-            'phone_number' => 'string|min:3|max:100',
-            'hobby' => 'string|min:3|max:100',
+        // Find the user
+        $user = User::find($validate['id']);
+
+        if (Gate::allows('isAdmin')) {
+            if (!$request->id) {
+                if (!Hash::check($validate['current_password'], $user->password)) {
+                    return response()->json([
+                        'message' => 'Current password is incorrect'
+                    ], 400);
+                }
+            }
+        } else {
+            // Check if the current password matches
+            if (!Hash::check($validate['current_password'], $user->password)) {
+                return response()->json([
+                    'message' => 'Current password is incorrect'
+                ], 400);
+            }
+        }
+
+        // Update the password
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'Password updated'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
-
-        $user = User::find($id);
-        $user->update($request->all());
-
         return response()->json([
-            'message' => 'User updated',
-            'data' => $user
+            'message' => 'Password updated successfully'
         ]);
     }
 
     public function login(Request $request)
     {
         if (!Auth::attempt($request->only('username', 'password'))) {
+
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Wrong login details'
             ], 401);
         }
 
+        $request->session()->regenerate();
+
         $user = User::where('username', $request->username)->firstOrFail();
 
+        $user->tokens()->delete();
+
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        // $response = new Response('Bearer Token');
+        // $response->withCookie(cookie('auth_token', $token, 62500));
+
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'Logged in'
+        ]);
 
         return response()->json([
             'message' => 'Login success',
@@ -102,9 +147,15 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::user()->tokens()->delete();
+        auth()->guard('web')->logout();
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'activity' => 'Logged out'
+        ]);
+
         return response()->json([
-            'message' => 'logout success'
+            'message' => 'Logged out'
         ]);
     }
 }
