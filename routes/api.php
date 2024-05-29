@@ -35,6 +35,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::post('/users', [UserController::class, 'updateProfile'])->name('users.update');
 
+    Route::get('/user/activities', [UserController::class, 'activities'])->name('user.activities');
+    Route::get('/activities', [UserController::class, 'allActivities'])->name('activities.all');
+
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
     Route::get('/roles/{id}', [RoleController::class, 'show'])->name('roles.show');
     Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
