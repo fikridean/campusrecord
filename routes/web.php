@@ -35,6 +35,7 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::get('/dashboard', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::POST('/dashboard', [UserController::class, 'search'])->middleware(['auth', 'verified'])->name('dashboardSearchUser');
 
 Route::get('/admin', function () {
     return view('admin');

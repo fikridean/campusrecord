@@ -52,6 +52,7 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
+
         $validate = $request->validate([
             'search' => 'required|string|min:3|max:100'
         ]);
@@ -66,14 +67,16 @@ class UserController extends Controller
             'activity' => 'Searched for user'
         ]);
 
-        return view('dashboard', [
-            'users' => $users
-        ]);
+        return redirect(Route('dashboardSearchUser')) -> with(['users' => $users]);
 
-        return response()->json([
-            'message' => 'success',
-            'data' => $users
-        ]);
+        // return view('dashboard', [
+        //     'users' => $users
+        // ]);
+
+        // return response()->json([
+        //     'message' => 'success',
+        //     'data' => $users
+        // ]);
     }
 
     public function show($id)

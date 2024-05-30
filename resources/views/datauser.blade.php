@@ -27,16 +27,16 @@
         <!-- Sidebar -->
         <div id="sidebar" class="w-64 bg-blue-700 text-white flex flex-col min-h-screen fixed transform -translate-x-full transition-transform duration-200 ease-in-out">
             <div class="p-6 font-bold text-center">
-                <p class="font-bold text-2xl text-center">Dashboard</p>
-                <p class="font-bold text-md text-center">[Role]</p>
-                <p class="font-bold text-md text-center">NIM : 123456789</p>
+                <p class="font-bold text-2xl text-center">satria03</p>
+                <p class="font-bold text-md text-center">admin</p>
+                <p class="font-bold text-md text-center">NIM : 11210910000122</p>
 
             </div>
             <div class="pl-7">
                 <nav class="flex-1">
                     <ul>
-                        <li class="p-4 hover:text-blue-800 hover:bg-white hover:rounded-tl-full hover:rounded-bl-full hover:font-bold {{ request()->is('admin') ? 'active-nav-link' : '' }}">
-                            <a href="/admin" class="block">Data Admin</a>
+                        <li class="p-4 hover:text-blue-800 hover:bg-white hover:rounded-tl-full hover:rounded-bl-full hover:font-bold {{ request()->is('dashboard') ? 'active-nav-link' : '' }}">
+                            <a href="/dashboard" class="block">Data Admin</a>
                         </li>
                         <li class="p-4 hover:text-blue-800 hover:bg-white hover:rounded-tl-full hover:rounded-bl-full hover:font-bold {{ request()->is('datauser') ? 'active-nav-link' : '' }}">
                             <a href="/datauser" class="block">Data User</a>
@@ -56,7 +56,7 @@
                         </svg>
                     </button>
                     <div class="ml-5">
-                        <h1 class="font-bold text-xl">Dashboard</h1>
+                        <h1 class="font-bold text-xl">Dashboard Admin</h1>
                     </div>
                 </div>
                 <div class="relative flex text-blue-700 top-3">
@@ -79,7 +79,7 @@
             <!-- Khusus User -->
             <div class="flex flex-col w-full p-10 bg-white overflow-auto">
                 <div class="my-5 flex">
-                    <input type="text" placeholder="Search your friend here by username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <input type="text" placeholder="Search username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     <button class="mx-5 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Search</button>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow w-full">
@@ -110,22 +110,26 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="py-2 px-4 border-b text-center"></td>
-                                <td class="py-2 px-4 border-b text-center"></td>
-                                <td class="py-2 px-4 border-b text-center"></td>
-                                <td class="py-2 px-4 border-b text-center"></td>
-                                <td class="py-2 px-4 border-b text-center"></td>
-                                <td class="py-2 px-4 border-b text-center"></td>
-                                <td class="py-2 px-4 border-b text-center"></td>
-                                <td class="py-2 px-4 border-b text-center"></td>
-                                <td class="py-2 px-4 border-b text-center"></td>
-                                <td class="py-2 px-4 border-b text-center"></td>
-                                <td class="py-2 px-4 border-b text-center"></td>
+                                <td class="py-2 px-4 border-b text-center">1</td>
+                                <td class="py-2 px-4 border-b text-center">raihan21</td>
+                                <td class="py-2 px-4 border-b text-center">M. Raihan A.</td>
+                                <td class="py-2 px-4 border-b text-center">03-06-2002</td>
+                                <td class="py-2 px-4 border-b text-center">Jl. Sukabumi Selatan</td>
+                                <td class="py-2 px-4 border-b text-center">Sukabumi</td>
+                                <td class="py-2 px-4 border-b text-center">Pesanggrahan</td>
+                                <td class="py-2 px-4 border-b text-center">Jakarat</td>
+                                <td class="py-2 px-4 border-b text-center">DKI JAKARTA</td>
                                 <td class="py-2 px-4 border-b text-center">
-                                    <button class="py-1 bg-blue-600 text-white px-2 rounded hover:opacity-80">
+                                <button class="py-1 bg-green-600 text-white px-2 rounded hover:opacity-80">
+                                        Track
+                                    </button>
+                                </td>
+                                <td class="py-2 px-4 border-b text-center">089733839829</td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    <button class="py-1 bg-red-600 text-white px-2 rounded hover:opacity-80">
                                         Delete
                                     </button>
-                                    <button class="py-1 bg-blue-600 text-white px-2 rounded hover:opacity-80">
+                                    <button class="py-1 bg-yellow-600 text-white px-2 rounded hover:opacity-80">
                                         Edit
                                     </button>
                                 </td>
