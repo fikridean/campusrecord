@@ -20,8 +20,11 @@ use App\Http\Controllers\Api\UserController;
 */
 
 Route::get('/', function () {
-    return view('signIn');
-})->name('signIn');
+    return view('landing');
+})->name('landing.index');
+
+Route::get('/login', [AuthController::class, 'login'])->name('login.index');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::get('/?message="Password Salah"', function () {
     return view('signIn');

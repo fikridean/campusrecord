@@ -19,7 +19,7 @@ class UserController extends Controller
         } else {
             $users = User::where(['role_id' => 2])->get();
         }
-        
+
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Accessed user list'
@@ -28,11 +28,6 @@ class UserController extends Controller
         return view('dashboard', [
             'users' => $users
         ]);
-
-        // return response()->json([
-        //     'message' => 'success',
-        //     'data' => $users
-        // ]);
     }
 
     public function profile()
@@ -67,7 +62,7 @@ class UserController extends Controller
             'activity' => 'Searched for user'
         ]);
 
-        return redirect(Route('dashboardSearchUser')) -> with(['users' => $users]);
+        return redirect(Route('dashboardSearchUser'))->with(['users' => $users]);
 
         // return view('dashboard', [
         //     'users' => $users
